@@ -16,10 +16,12 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       rentPerDay: DataTypes.INTEGER,
       size: DataTypes.STRING,
+      photo: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "Car",
+      paranoid: true,
     }
   );
   return Car;

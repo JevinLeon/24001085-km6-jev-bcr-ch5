@@ -30,7 +30,7 @@ exports.getCar = async (req, res, next) => {
 exports.addCar = async (req, res, next) => {
   try {
     const newCar = req.body;
-    const { photo } = req.files;
+    const { photo } = JSON.parse(JSON.stringify(req.files));
     const { name, rentPerDay, size } = newCar;
 
     if (!name || name == "") {
@@ -67,6 +67,7 @@ exports.addCar = async (req, res, next) => {
 exports.updateCar = async (req, res, next) => {
   try {
     const id = parseInt(req?.params?.id);
+    const { photo } = JSON.parse(JSON.stringify(req.files));
 
     const newCar = req.body;
     const { name, rentPerDay, size } = newCar;
@@ -92,7 +93,7 @@ exports.updateCar = async (req, res, next) => {
       });
     }
 
-    const data = await carServices.updateCar(id, newCar);
+    const data = await carServices.updateCar(id, { ...newCar, photo });
     res.status(200).json({
       data,
       message: "Car added successfully",

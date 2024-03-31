@@ -1,5 +1,6 @@
 require("dotenv").config();
-const fileupload = require("express-fileupload");
+const fileUpload = require("express-fileupload");
+const bodyParser = require("body-parser");
 
 const express = require("express");
 const router = require("./routes");
@@ -8,19 +9,14 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
-  fileupload({
+  fileUpload({
     useTempFiles: true,
   })
 );
 app.use(express.static("../public"));
 app.use("/api", router);
-
-// app.get("/cars", router);
-// app.get("/cars/:id", router);
-// app.post("/cars", router);
-// app.put("/cars/:id", router);
-// app.delete("/cars/:id", router);
 
 app.use((err, req, res, next) => {
   let statusCode = 500;

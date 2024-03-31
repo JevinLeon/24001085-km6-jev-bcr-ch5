@@ -33,14 +33,13 @@ exports.getCar = async (id) => {
 };
 
 exports.addCar = async (payload) => {
-  console.log(payload);
-  // if (payload.photo) {
-  //   const { photo } = payload;
-  //   photo.publicId = crypto.randomBytes(16).toString("hex");
-  //   photo.name = `${photo.publicId}${path.parse(photo.name).ext}`;
-  //   const imageUpload = await uploader(photo);
-  //   payload.photo = imageUpload.secureUrl;
-  // }
+  if (payload.photo) {
+    const { photo } = payload;
+    photo.publicId = crypto.randomBytes(16).toString("hex");
+    photo.name = `${photo.publicId}${path.parse(photo.name).ext}`;
+    const imageUpload = await uploader(photo);
+    payload.photo = imageUpload.secure_url;
+  }
   const newCar = await Car.create({ ...payload });
   const key = `cars:${newCar.id}`;
   await setData(key, newCar, 300);
@@ -53,6 +52,15 @@ exports.updateCar = async (id, payload) => {
   const selectedCar = await Car.findOne({ where: { id } });
 
   if (selectedCar) {
+    console.log(payload);
+    if (payload.photo) {
+      const { photo } = payload;
+      photo.publicId = crypto.randomBytes(16).toString("hex");
+      photo.name = `${photo.publicId}${path.parse(photo.name).ext}`;
+      const imageUpload = await uploader(photo);
+      payload.photo = imageUpload.secure_url;
+    }
+
     const updatedCar = await selectedCar.update({ ...payload });
     await setData(key, updatedCar, 300);
 

@@ -6,7 +6,6 @@ exports.uploader = (file) => {
       file.tempFilePath,
       { public_id: file.publicId },
       function (error, result) {
-        console.log(result);
         if (error) {
           return reject(error);
         }
