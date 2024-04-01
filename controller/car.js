@@ -96,7 +96,7 @@ exports.updateCar = async (req, res, next) => {
     const data = await carServices.updateCar(id, { ...newCar, photo });
     res.status(200).json({
       data,
-      message: "Car added successfully",
+      message: "Car updated successfully",
     });
   } catch (err) {
     next(err);

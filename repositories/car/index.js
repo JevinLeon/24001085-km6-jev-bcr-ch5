@@ -52,7 +52,6 @@ exports.updateCar = async (id, payload) => {
   const selectedCar = await Car.findOne({ where: { id } });
 
   if (selectedCar) {
-    console.log(payload);
     if (payload.photo) {
       const { photo } = payload;
       photo.publicId = crypto.randomBytes(16).toString("hex");
