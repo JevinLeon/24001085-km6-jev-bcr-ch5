@@ -1,4 +1,7 @@
 const carServices = require("../services/car");
+const manufactureServices = require("../services/manufacture");
+const typeServices = require("../services/type");
+const transmissionServices = require("../services/transmission");
 
 exports.getCars = async (req, res, next) => {
   try {
@@ -30,31 +33,187 @@ exports.getCar = async (req, res, next) => {
 exports.addCar = async (req, res, next) => {
   try {
     const newCar = req.body;
-    const { photo } = JSON.parse(JSON.stringify(req.files));
-    const { name, rentPerDay, size } = newCar;
+    const { image } = JSON.parse(JSON.stringify(req.files));
+    let {
+      model,
+      plate,
+      rentPerDay,
+      description,
+      capacity,
+      availableAt,
+      available,
+      year,
+      options,
+      specs,
+      manufacture_id,
+      type_id,
+      transmission_id,
+    } = newCar;
 
-    if (!name || name == "") {
-      return res.status(400).json({
-        data: null,
-        message: "Car name is required",
+    if (!model || model == "") {
+      return next({
+        statusCode: 404,
+        message: "Car model is required",
+      });
+    }
+
+    if (!plate || plate == "") {
+      return next({
+        statusCode: 404,
+
+        message: "Car plate is required",
       });
     }
 
     if (!rentPerDay || isNaN(parseInt(rentPerDay)) || rentPerDay <= 0) {
-      return res.status(400).json({
-        data: null,
+      return next({
+        statusCode: 404,
+
         message: "Car rent price must be positive value",
       });
+    } else {
+      rentPerDay = parseInt(rentPerDay);
     }
 
-    if (!size || size == "") {
-      return res.status(400).json({
-        data: null,
-        message: "Car size is required",
+    if (!description || description == "") {
+      return next({
+        statusCode: 404,
+
+        message: "Car description is required",
       });
     }
 
-    const data = await carServices.addCar({ ...newCar, photo });
+    if (!capacity || isNaN(parseInt(capacity)) || capacity <= 0) {
+      return next({
+        statusCode: 404,
+
+        message: "Car rent price must be positive value",
+      });
+    } else {
+      capacity = parseInt(capacity);
+    }
+
+    if (!availableAt || availableAt == "") {
+      return next({
+        statusCode: 404,
+
+        message: "Car available schedule is required",
+      });
+    }
+
+    if (!available || isNaN(parseInt(capacity))) {
+      return next({
+        statusCode: 404,
+
+        message: "Car availablity is required",
+      });
+    } else {
+      available = parseInt(available) ? true : false;
+    }
+
+    if (!year || year == "") {
+      return next({
+        statusCode: 404,
+
+        message: "Car year is required",
+      });
+    }
+    if (!image) {
+      return next({
+        statusCode: 404,
+
+        message: "Car image is required",
+      });
+    }
+
+    if (
+      !manufacture_id ||
+      isNaN(parseInt(manufacture_id)) ||
+      manufacture_id <= 0
+    ) {
+      return next({
+        statusCode: 404,
+
+        message: "Manufacture is required",
+      });
+    } else {
+      manufacture_id = parseInt(manufacture_id);
+    }
+
+    const manufactureExist = await manufactureServices.getManufacture(
+      parseInt(manufacture_id)
+    );
+
+    if (!manufactureExist) {
+      return next({
+        statusCode: 404,
+        message: "Manufacture is not found",
+      });
+    }
+
+    if (!type_id || isNaN(parseInt(type_id)) || type_id <= 0) {
+      return next({
+        statusCode: 404,
+
+        message: "Manufacture is required",
+      });
+    } else {
+      type_id = parseInt(type_id);
+    }
+
+    const typeExist = await typeServices.getType(parseInt(type_id));
+
+    if (!typeExist) {
+      return next({
+        statusCode: 404,
+        message: "type is not found",
+      });
+    }
+
+    if (
+      !transmission_id ||
+      isNaN(parseInt(transmission_id)) ||
+      transmission_id <= 0
+    ) {
+      return next({
+        statusCode: 404,
+
+        message: "Manufacture is required",
+      });
+    } else {
+      transmission_id = parseInt(transmission_id);
+    }
+
+    const transmissionExist = await transmissionServices.getTransmission(
+      parseInt(transmission_id)
+    );
+
+    if (!transmissionExist) {
+      return next({
+        statusCode: 404,
+        message: "transmission is not found",
+      });
+    }
+
+    specs = specs.split(",");
+    options = options.split(",");
+
+    const data = await carServices.addCar({
+      model,
+      plate,
+      rentPerDay,
+      description,
+      capacity,
+      availableAt,
+      available,
+      year,
+      options,
+      specs,
+      manufacture_id,
+      type_id,
+      transmission_id,
+      image,
+    });
     res.status(200).json({
       data,
       message: "Car added successfully",
@@ -66,37 +225,192 @@ exports.addCar = async (req, res, next) => {
 
 exports.updateCar = async (req, res, next) => {
   try {
-    const id = parseInt(req?.params?.id);
-    const { photo } = JSON.parse(JSON.stringify(req.files));
-
     const newCar = req.body;
-    const { name, rentPerDay, size } = newCar;
+    const id = parseInt(req?.params?.id);
+    const { image } = JSON.parse(JSON.stringify(req.files));
+    let {
+      model,
+      plate,
+      rentPerDay,
+      description,
+      capacity,
+      availableAt,
+      available,
+      year,
+      options,
+      specs,
+      manufacture_id,
+      type_id,
+      transmission_id,
+    } = newCar;
 
-    if (!name || name == "") {
-      return res.status(400).json({
-        data: null,
-        message: "Car name is required",
+    if (!model || model == "") {
+      return next({
+        statusCode: 404,
+        message: "Car model is required",
+      });
+    }
+
+    if (!plate || plate == "") {
+      return next({
+        statusCode: 404,
+
+        message: "Car plate is required",
       });
     }
 
     if (!rentPerDay || isNaN(parseInt(rentPerDay)) || rentPerDay <= 0) {
-      return res.status(400).json({
-        data: null,
+      return next({
+        statusCode: 404,
+
         message: "Car rent price must be positive value",
       });
+    } else {
+      rentPerDay = parseInt(rentPerDay);
     }
 
-    if (!size || size == "") {
-      return res.status(400).json({
-        data: null,
-        message: "Car size is required",
+    if (!description || description == "") {
+      return next({
+        statusCode: 404,
+
+        message: "Car description is required",
       });
     }
 
-    const data = await carServices.updateCar(id, { ...newCar, photo });
+    if (!capacity || isNaN(parseInt(capacity)) || capacity <= 0) {
+      return next({
+        statusCode: 404,
+
+        message: "Car rent price must be positive value",
+      });
+    } else {
+      capacity = parseInt(capacity);
+    }
+
+    if (!availableAt || availableAt == "") {
+      return next({
+        statusCode: 404,
+
+        message: "Car available schedule is required",
+      });
+    }
+
+    if (!available || isNaN(parseInt(capacity))) {
+      return next({
+        statusCode: 404,
+
+        message: "Car availablity is required",
+      });
+    } else {
+      available = parseInt(available) ? true : false;
+    }
+
+    if (!year || year == "") {
+      return next({
+        statusCode: 404,
+
+        message: "Car year is required",
+      });
+    }
+    if (!image) {
+      return next({
+        statusCode: 404,
+
+        message: "Car image is required",
+      });
+    }
+
+    if (
+      !manufacture_id ||
+      isNaN(parseInt(manufacture_id)) ||
+      manufacture_id <= 0
+    ) {
+      return next({
+        statusCode: 404,
+
+        message: "Manufacture is required",
+      });
+    } else {
+      manufacture_id = parseInt(manufacture_id);
+    }
+
+    const manufactureExist = await manufactureServices.getManufacture(
+      parseInt(manufacture_id)
+    );
+
+    if (!manufactureExist) {
+      return next({
+        statusCode: 404,
+        message: "Manufacture is not found",
+      });
+    }
+
+    if (!type_id || isNaN(parseInt(type_id)) || type_id <= 0) {
+      return next({
+        statusCode: 404,
+
+        message: "Manufacture is required",
+      });
+    } else {
+      type_id = parseInt(type_id);
+    }
+
+    const typeExist = await typeServices.getType(parseInt(type_id));
+
+    if (!typeExist) {
+      return next({
+        statusCode: 404,
+        message: "type is not found",
+      });
+    }
+
+    if (
+      !transmission_id ||
+      isNaN(parseInt(transmission_id)) ||
+      transmission_id <= 0
+    ) {
+      return next({
+        statusCode: 404,
+
+        message: "Manufacture is required",
+      });
+    } else {
+      transmission_id = parseInt(transmission_id);
+    }
+
+    const transmissionExist = await transmissionServices.getTransmission(
+      parseInt(transmission_id)
+    );
+
+    if (!transmissionExist) {
+      return next({
+        statusCode: 404,
+        message: "transmission is not found",
+      });
+    }
+
+    specs = specs.split(",");
+    options = options.split(",");
+
+    const data = await carServices.updateCar(id, {
+      model,
+      plate,
+      rentPerDay,
+      description,
+      capacity,
+      availableAt,
+      available,
+      year,
+      options,
+      specs,
+      manufacture_id,
+      type_id,
+      transmission_id,
+      image,
+    });
     res.status(200).json({
       data,
-      message: "Car updated successfully",
+      message: "Car added successfully",
     });
   } catch (err) {
     next(err);

@@ -5,9 +5,9 @@ const path = require("path");
 const { getData, setData, deleteData } = require("../../helper/redis");
 
 exports.getCars = async () => {
-  const Cars = await Car.findAll();
+  const cars = await Car.findAll();
 
-  return Cars;
+  return cars;
 };
 
 exports.getCar = async (id) => {
@@ -33,12 +33,12 @@ exports.getCar = async (id) => {
 };
 
 exports.addCar = async (payload) => {
-  if (payload.photo) {
-    const { photo } = payload;
-    photo.publicId = crypto.randomBytes(16).toString("hex");
-    photo.name = `${photo.publicId}${path.parse(photo.name).ext}`;
-    const imageUpload = await uploader(photo);
-    payload.photo = imageUpload.secure_url;
+  if (payload.image) {
+    const { image } = payload;
+    image.publicId = crypto.randomBytes(16).toString("hex");
+    image.name = `${image.publicId}${path.parse(image.name).ext}`;
+    const imageUpload = await uploader(image);
+    payload.image = imageUpload.secure_url;
   }
   const newCar = await Car.create({ ...payload });
   const key = `cars:${newCar.id}`;
@@ -52,12 +52,12 @@ exports.updateCar = async (id, payload) => {
   const selectedCar = await Car.findOne({ where: { id } });
 
   if (selectedCar) {
-    if (payload.photo) {
-      const { photo } = payload;
-      photo.publicId = crypto.randomBytes(16).toString("hex");
-      photo.name = `${photo.publicId}${path.parse(photo.name).ext}`;
-      const imageUpload = await uploader(photo);
-      payload.photo = imageUpload.secure_url;
+    if (payload.image) {
+      const { image } = payload;
+      image.publicId = crypto.randomBytes(16).toString("hex");
+      image.name = `${image.publicId}${path.parse(image.name).ext}`;
+      const imageUpload = await uploader(image);
+      payload.image = imageUpload.secure_url;
     }
 
     const updatedCar = await selectedCar.update({ ...payload });
