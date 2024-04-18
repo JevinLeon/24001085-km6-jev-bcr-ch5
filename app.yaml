@@ -1,0 +1,6 @@
+runtime: nodejs20
+service: default
+
+predeploy:
+  - npm install
+  - npm sequelize db:migrate

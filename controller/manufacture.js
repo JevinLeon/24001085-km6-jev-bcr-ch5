@@ -30,7 +30,8 @@ exports.getManufacture = async (req, res, next) => {
 exports.addManufacture = async (req, res, next) => {
   try {
     const newManufacture = req.body;
-    console.log(newManufacture);
+    const createdBy = req?.user?.id;
+
     const { name } = newManufacture;
 
     if (!name || name == "") {
@@ -42,6 +43,7 @@ exports.addManufacture = async (req, res, next) => {
 
     const data = await manufactureServices.addManufacture({
       ...newManufacture,
+      createdBy,
     });
     res.status(200).json({
       data,
@@ -55,6 +57,7 @@ exports.addManufacture = async (req, res, next) => {
 exports.updateManufacture = async (req, res, next) => {
   try {
     const id = parseInt(req?.params?.id);
+    const updatedBy = req?.user?.id;
 
     const newManufacture = req.body;
     const { name } = newManufacture;
@@ -68,6 +71,7 @@ exports.updateManufacture = async (req, res, next) => {
 
     const data = await manufactureServices.updateManufacture(id, {
       ...newManufacture,
+      updatedBy,
     });
     res.status(200).json({
       data,
@@ -81,6 +85,9 @@ exports.updateManufacture = async (req, res, next) => {
 exports.deleteManufacture = async (req, res, next) => {
   try {
     const id = parseInt(req?.params?.id);
+    const deletedBy = req?.user?.id;
+
+    await manufactureServices.updateManufacture(id, { deletedBy });
 
     const data = await manufactureServices.deleteManufacture(id);
     res.status(200).json({

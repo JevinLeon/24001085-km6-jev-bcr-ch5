@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
       manufacture_id: DataTypes.INTEGER,
       type_id: DataTypes.INTEGER,
       transmission_id: DataTypes.INTEGER,
+      createdBy: DataTypes.INTEGER,
+      updatedBy: DataTypes.INTEGER,
+      createdBy: DataTypes.INTEGER,
+      deletedBy: DataTypes.INTEGER,
     },
     {
       sequelize,
