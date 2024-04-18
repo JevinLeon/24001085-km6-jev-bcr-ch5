@@ -89,14 +89,26 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn("NOW"),
       },
+      createdBy: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn("NOW"),
       },
+      updatedBy: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       deletedAt: {
         allowNull: true,
         type: Sequelize.DATE,
+      },
+      deletedBy: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
       },
     });
   },

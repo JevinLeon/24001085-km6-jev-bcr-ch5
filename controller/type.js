@@ -31,6 +31,7 @@ exports.addType = async (req, res, next) => {
   try {
     const newType = req.body;
     const { name } = newType;
+    const createdBy = req?.user?.id;
 
     if (!name || name == "") {
       return res.status(400).json({
@@ -41,6 +42,7 @@ exports.addType = async (req, res, next) => {
 
     const data = await typeServices.addType({
       ...newType,
+      createdBy,
     });
     res.status(200).json({
       data,
@@ -57,6 +59,7 @@ exports.updateType = async (req, res, next) => {
 
     const newType = req.body;
     const { name } = newType;
+    const updatedBy = req?.user?.id;
 
     if (!name || name == "") {
       return res.status(400).json({
@@ -67,6 +70,7 @@ exports.updateType = async (req, res, next) => {
 
     const data = await typeServices.updateType(id, {
       ...newType,
+      updatedBy,
     });
     res.status(200).json({
       data,
@@ -80,6 +84,9 @@ exports.updateType = async (req, res, next) => {
 exports.deleteType = async (req, res, next) => {
   try {
     const id = parseInt(req?.params?.id);
+    const deletedBy = req?.user?.id;
+
+    await typeServices.updateType(id, { deletedBy });
 
     const data = await typeServices.deleteType(id);
     res.status(200).json({

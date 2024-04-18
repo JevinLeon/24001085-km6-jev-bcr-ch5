@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
   Type.init(
     {
       name: DataTypes.STRING,
+      createdBy: DataTypes.INTEGER,
+      updatedBy: DataTypes.INTEGER,
+      createdBy: DataTypes.INTEGER,
+      deletedBy: DataTypes.INTEGER,
     },
     {
       sequelize,

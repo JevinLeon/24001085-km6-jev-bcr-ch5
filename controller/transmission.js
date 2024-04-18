@@ -30,6 +30,7 @@ exports.getTransmission = async (req, res, next) => {
 exports.addTransmission = async (req, res, next) => {
   try {
     const newTransmission = req.body;
+    const createdBy = req?.user?.id;
     const { name } = newTransmission;
 
     if (!name || name == "") {
@@ -41,6 +42,7 @@ exports.addTransmission = async (req, res, next) => {
 
     const data = await transmissionServices.addTransmission({
       ...newTransmission,
+      createdBy,
     });
     res.status(200).json({
       data,
@@ -54,7 +56,7 @@ exports.addTransmission = async (req, res, next) => {
 exports.updateTransmission = async (req, res, next) => {
   try {
     const id = parseInt(req?.params?.id);
-
+    const updatedBy = req?.user?.id;
     const newTransmission = req.body;
     const { name } = newTransmission;
 
@@ -67,6 +69,7 @@ exports.updateTransmission = async (req, res, next) => {
 
     const data = await transmissionServices.updateTransmission(id, {
       ...newTransmission,
+      updatedBy,
     });
     res.status(200).json({
       data,
@@ -80,6 +83,9 @@ exports.updateTransmission = async (req, res, next) => {
 exports.deleteTransmission = async (req, res, next) => {
   try {
     const id = parseInt(req?.params?.id);
+    const deletedBy = req?.user?.id;
+
+    await transmissionServices.updateTransmission(id, { deletedBy });
 
     const data = await transmissionServices.deleteTransmission(id);
     res.status(200).json({

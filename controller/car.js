@@ -34,6 +34,8 @@ exports.addCar = async (req, res, next) => {
   try {
     const newCar = req.body;
     const { image } = JSON.parse(JSON.stringify(req.files));
+    const createdBy = req?.user?.id;
+
     let {
       model,
       plate,
@@ -213,6 +215,7 @@ exports.addCar = async (req, res, next) => {
       type_id,
       transmission_id,
       image,
+      createdBy,
     });
     res.status(200).json({
       data,
@@ -227,6 +230,7 @@ exports.updateCar = async (req, res, next) => {
   try {
     const newCar = req.body;
     const id = parseInt(req?.params?.id);
+    const updatedBy = req?.user?.id;
     const { image } = JSON.parse(JSON.stringify(req.files));
     let {
       model,
@@ -407,6 +411,7 @@ exports.updateCar = async (req, res, next) => {
       type_id,
       transmission_id,
       image,
+      updatedBy,
     });
     res.status(200).json({
       data,
@@ -420,6 +425,9 @@ exports.updateCar = async (req, res, next) => {
 exports.deleteCar = async (req, res, next) => {
   try {
     const id = parseInt(req?.params?.id);
+    const deletedBy = req?.user?.id;
+
+    await carServices.updateCar(id, { deletedBy });
 
     const data = await carServices.deleteCar(id);
     res.status(200).json({
