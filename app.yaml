@@ -2,4 +2,4 @@ runtime: nodejs20
 # service: default
 
 vpc_access_connector:
-  name: "projects/ kampus-merdeka-6/locations/asia-southeast2/connectors/connect-to-sql"
+  name: "projects/kampus-merdeka-6/locations/asia-southeast2/connectors/connect-to-sql"
