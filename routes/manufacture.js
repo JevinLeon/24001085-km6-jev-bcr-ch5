@@ -7,7 +7,7 @@ const { authMiddleware } = require("../middlewares/auth");
 router
   .route("/")
   .get(
-    authMiddleware(["admin", "superadmin"]),
+    authMiddleware(["guest", "admin", "superadmin"]),
     manufactureController.getManufactures
   )
   .post(
@@ -18,7 +18,7 @@ router
 router
   .route("/:id")
   .get(
-    authMiddleware(["admin", "superadmin"]),
+    authMiddleware(["guest", "admin", "superadmin"]),
     manufactureController.getManufacture
   )
   .put(
