@@ -2,9 +2,12 @@ const { register, login, profile } = require("../services/auth");
 
 exports.register = async (req, res, next) => {
   try {
+    let photo = null;
     const { email, password, name, role } = req.body;
 
-    const { photo } = req.files;
+    if (req.files) {
+      photo = req.files.photo;
+    }
 
     if (email == "" || !email) {
       return next({
@@ -48,7 +51,11 @@ exports.register = async (req, res, next) => {
 exports.createAdmin = async (req, res, next) => {
   try {
     const { email, password, name } = req.body;
-    const { photo } = req.files;
+    let photo = null;
+
+    if (req.files) {
+      photo = req.files.photo;
+    }
     const role = "admin";
 
     if (email == "" || !email) {
