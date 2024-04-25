@@ -27,6 +27,9 @@ exports.addUser = async (payload) => {
 
     const imageUpload = await uploader(photo);
     payload.photo = imageUpload.secure_url;
+  } else {
+    payload.photo =
+      "https://res.cloudinary.com/dv2jeayrr/image/upload/v1714061176/62b30b04ffc6772555eaa75b60b5f06a.jpg";
   }
 
   const data = await User.create(payload);
