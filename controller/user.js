@@ -27,9 +27,6 @@ exports.register = async (req, res, next) => {
         statusCode: 400,
       });
     }
-    if (role == "" || !role) {
-      role = "user";
-    }
 
     const data = await register({
       email,
