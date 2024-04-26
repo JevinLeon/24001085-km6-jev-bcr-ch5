@@ -9,6 +9,8 @@ exports.register = async (req, res, next) => {
       photo = req.files.photo;
     }
 
+    console.log(photo);
+
     if (email == "" || !email) {
       return next({
         message: "Email must be filled",

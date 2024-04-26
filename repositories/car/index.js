@@ -1,11 +1,26 @@
-const { Car } = require("../../models");
+const { Car, Manufacture, Transmission, Type } = require("../../models");
 const { uploader } = require("../../helper/cloudinary");
 const crypto = require("crypto");
 const path = require("path");
 const { getData, setData, deleteData } = require("../../helper/redis");
 
 exports.getCars = async () => {
-  const cars = await Car.findAll();
+  const cars = await Car.findAll({
+    include: [
+      {
+        model: Manufacture,
+        required: true,
+      },
+      {
+        model: Transmission,
+        required: true,
+      },
+      {
+        model: Type,
+        required: true,
+      },
+    ],
+  });
 
   return cars;
 };
@@ -22,6 +37,20 @@ exports.getCar = async (id) => {
     where: {
       id,
     },
+    include: [
+      {
+        model: Manufacture,
+        required: true,
+      },
+      {
+        model: Transmission,
+        required: true,
+      },
+      {
+        model: Type,
+        required: true,
+      },
+    ],
   });
 
   if (selectedCar) {
