@@ -231,7 +231,14 @@ exports.updateCar = async (req, res, next) => {
     const newCar = req.body;
     const id = parseInt(req?.params?.id);
     const updatedBy = req?.user?.id;
-    const { image } = JSON.parse(JSON.stringify(req.files));
+    let image;
+
+    if (req.body?.image) {
+      image = req.body?.image;
+    } else {
+      const { image: imageFile } = JSON.parse(JSON.stringify(req.files));
+      image = imageFile;
+    }
     let {
       model,
       plate,
