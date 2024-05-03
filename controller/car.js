@@ -422,7 +422,7 @@ exports.updateCar = async (req, res, next) => {
     });
     res.status(200).json({
       data,
-      message: "Car added successfully",
+      message: "Car updated successfully",
     });
   } catch (err) {
     next(err);
